@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 
+
 class Picking_update(models.Model):
     _inherit='stock.picking'
 
@@ -36,11 +37,7 @@ class Picking_update(models.Model):
                 SELECT x_studio_field_r5v12 as n_estacion,
                 ai.amount_total as precio_venta,
                 ai.currency_id,
-                    (select rate
-                    from res_currency_rate
-                    WHERE currency_id=3
-                    order by name DESC
-                    LIMIT 1) as tasa
+                so.tipo_cambio
                 from sale_order so
                 INNER JOIN account_invoice ai on so.name=ai.origin
                 WHERe so.name='{}'
@@ -51,20 +48,30 @@ class Picking_update(models.Model):
         contenido=[]
         for con in consulta:
             if con['currency_id']==3:
-                aux={
-                    'n_estacion':con['n_estacion'],
-                    'precio_venta': str(con['precio_venta']) + ' USD',
-                    'precio_venta_pesos':con['precio_venta'] * con['tasa'],
-                    'tasa':con['tasa'],
-                    'currency_id':con['currency_id']
-                }
-                contenido.append(aux)
+                if con['tipo_cambio']==0.0:
+                    aux = {
+                        'n_estacion': con['n_estacion'],
+                        'precio_venta': str(con['precio_venta']) + ' USD',
+                        'precio_venta_pesos': con['precio_venta'] * 1,
+                        'tipo_cambio': con['tipo_cambio'],
+                        'currency_id': con['currency_id']
+                    }
+                    contenido.append(aux)
+                else:
+                    aux={
+                        'n_estacion':con['n_estacion'],
+                        'precio_venta': str(con['precio_venta']) + ' USD',
+                        'precio_venta_pesos':con['precio_venta'] * con['tipo_cambio'],
+                        'tipo_cambio':con['tipo_cambio'],
+                        'currency_id':con['currency_id']
+                    }
+                    contenido.append(aux)
 
             else:
                 aux2 = {
                     'n_estacion': con['n_estacion'],
                     'precio_venta': con['precio_venta'],
-                    'tasa': con['tasa'],
+                    'tipo_cambio': con['tipo_cambio'],
                     'currency_id':False,
                 }
                 contenido.append(aux2)
@@ -88,13 +95,19 @@ class Picking_update(models.Model):
         self.env.cr.execute(sql)
         gastos_instalacion= self.env.cr.dictfetchall()
 
+        importe_venta=self.tasa_importe()
+        for con in gastos_instalacion:
+            operacion_porcentaje_gastos=(con['total_amount'] / importe_venta['precio_venta']) * 100
+            con['porcentaje_gastos']=str(operacion_porcentaje_gastos)[0:len(str(operacion_porcentaje_gastos))-9]
+
         return gastos_instalacion
 
     def productos_surtidos(self):
 
         sql="""
                 select pt.name,
-                pt.standard_price
+                pt.standard_price,
+                m.product_qty
                 from stock_picking sp
                 INNER JOIN stock_move m on sp.id = m.picking_id
                 INNER JOIN product_product pp on m.product_id = pp.id
@@ -106,25 +119,28 @@ class Picking_update(models.Model):
 
         total_productos_surtidos=0
         for con in consulta:
-            total_productos_surtidos= total_productos_surtidos + con['standard_price']
+            costos_equipos = con['standard_price'] * con['product_qty']
+            total_productos_surtidos= total_productos_surtidos + costos_equipos
 
         return '$ '+str(total_productos_surtidos)
 
     def tasa_importe(self):
+        #SE INICIALIZA UN DICCIONARIO CON 'currency_id':False, YA QUE SI NO HAY FACTURA
+        #DA ERROR POR QUE EL DICCIONARIO QUE REGRESA ESTA VACIO Y 'currency_id' SE USA PARA
+        # VALIDAR EN QUE APARESCA UNA TABLA EN EL XML
+        dict={'currency_id':False}
 
-        dict={}
         for con in self.estacion_impuestos():
             if con['currency_id']==3:
                 dict={
-                    'tasa':con['tasa'],
-                    #'precio_venta':con['precio_venta'] * int(con['tasa']),
+                    'tipo_cambio':con['tipo_cambio'],
                     'precio_venta':con['precio_venta_pesos'],
                     'currency_id':con['currency_id'],
                 }
 
             else:
                 dict = {
-                    'tasa': con['tasa'],
+                    'tipo_cambio': con['tipo_cambio'],
                     'precio_venta': con['precio_venta'],
                     'currency_id': con['currency_id'],
                 }

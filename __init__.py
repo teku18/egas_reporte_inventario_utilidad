@@ -29,3 +29,4 @@
 
 import models
 import report
+import views

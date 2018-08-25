@@ -29,3 +29,4 @@
 
 import product_template_update
 import stock_picking_update
+import sale_update
