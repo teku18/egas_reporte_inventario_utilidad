@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="invoice_form_update" model="ir.ui.view">
+            <field name="name">invoice.form.update</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="team_id" position="after">
+                    <field name="tipo_cambio_id" attrs="{'invisible':[('currency_id','=',34)]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

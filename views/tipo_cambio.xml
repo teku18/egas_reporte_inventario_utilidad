@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--TREE VIEW-->
+        <record id="tipo_cambio_tree" model="ir.ui.view">
+            <field name="name">tipo.cambio.tree</field>
+            <field name="model">tipo.cambio</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="fecha_cambio"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="tipo_cambio_form" model="ir.ui.view">
+            <field name="name">tipo.cambio.form</field>
+            <field name="model">tipo.cambio</field>
+            <field name="arch" type="xml">
+                <form string="Formulario Ciudades">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="fecha_cambio"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="action_tipo_cambio">
+            <field name="name">Lista...</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tipo.cambio</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_tipo_cambio" name="Tipo de Cambio" sequence="3"/>
+        <menuitem id="sub_menu_tipo_cambio" name="Tipo Cambio..." parent="menu_tipo_cambio"/>
+        <menuitem id="lista_tipo_cambio" name="Lista Tipo Cambio" parent="sub_menu_tipo_cambio" action="action_tipo_cambio"/>
+    </data>
+</odoo>

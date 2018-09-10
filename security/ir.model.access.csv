@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+tipo_cambio,tipo.cambio.group,model_tipo_cambio,egas_inventario_utilidad.group_tipo_cambio,1,1,1,1
+
+
+# id es el identificador externo del registro (también conocido como XML ID). Debe ser único en nuestro módulo.
+# name es un título de descripción. Es sólo informativo y es mejor si se mantiene único. Los módulos oficiales normalmente usan una cadena separada por puntos con el nombre del modelo y el grupo.
+# model_id es el identificador externo del modelo al que estamos dando acceso.
+# group_id identifica el grupo de seguridad para dar permisos. Los más importantes son proporcionados por el módulo base.
+
+ Los campos perm marcan el acceso a garantizar read, write, create o un link (borrar) el acceso.
+    # read
+    # write
+    # create
+    # unlink

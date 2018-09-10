@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Declarando el grupo Tipo Cambio-->
+        <record id="group_tipo_cambio" model="res.groups">
+            <field name="name">Tipo Cambio</field>
+            <field name="comment">Tipo Cambio</field>
+        </record>
+    </data>
+</odoo>

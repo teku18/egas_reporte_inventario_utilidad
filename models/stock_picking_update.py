@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 
 
@@ -28,8 +29,11 @@ class Picking_update(models.Model):
         for con in self.gastos_instalacion():
             total_gastos= total_gastos + con['total_amount']
 
+        obj_tasa = self.tasa_importe()
+        porcentaje_instalacion= (total_gastos / obj_tasa['precio_venta']) * 100
+
         #RETORNA EL VALOR CON EL SIGNO DE PESOS '$'
-        return '$ '+str(total_utilidad), '$ ' + str(total_gastos)
+        return '$ '+str(total_utilidad), '$ ' + str(total_gastos), str(porcentaje_instalacion)[0:5]
 
     def estacion_impuestos(self):
 
@@ -37,13 +41,15 @@ class Picking_update(models.Model):
                 SELECT x_studio_field_r5v12 as n_estacion,
                 ai.amount_total as precio_venta,
                 ai.currency_id,
-                so.tipo_cambio
+                t.name as tipo_cambio
                 from sale_order so
                 INNER JOIN account_invoice ai on so.name=ai.origin
+                INNER JOIN tipo_cambio t on t.id=ai.tipo_cambio_id
                 WHERe so.name='{}'
             """.format(self.origin)
         self.env.cr.execute(sql)
         consulta = self.env.cr.dictfetchall()
+        print(consulta)
 
         contenido=[]
         for con in consulta:
@@ -122,7 +128,10 @@ class Picking_update(models.Model):
             costos_equipos = con['standard_price'] * con['product_qty']
             total_productos_surtidos= total_productos_surtidos + costos_equipos
 
-        return '$ '+str(total_productos_surtidos)
+        obj_tasa=self.tasa_importe()
+        porcentaje_producto=(total_productos_surtidos / obj_tasa['precio_venta']) * 100
+
+        return '$ '+str(total_productos_surtidos), str(porcentaje_producto)[0:5]
 
     def tasa_importe(self):
         #SE INICIALIZA UN DICCIONARIO CON 'currency_id':False, YA QUE SI NO HAY FACTURA

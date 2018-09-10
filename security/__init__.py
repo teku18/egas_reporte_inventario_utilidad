@@ -26,8 +26,3 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-import tipo_cambio
-import product_template_update
-import stock_picking_update
-import account_invoice_update

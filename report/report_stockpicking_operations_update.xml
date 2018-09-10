@@ -49,7 +49,7 @@
                                     <th t-if="o.origin"><strong>PEDIDO</strong></th>
                                     <th><strong>ESTADO</strong></th>
                                     <th><strong>FECHA</strong></th>
-                                    <th name="td_sched_date_h"><strong>FECHA EMBARQUE</strong></th>
+                                    <th name="td_sched_date_h"><strong>FECHA ENBARQUE</strong></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,7 +131,8 @@
 
 
                             <div class="text-right"><!--EL METODO DEVUELVE UN VALOR UNICO-->
-                                <strong>EQUIPOS Y PRODUCTOS SURTIDOS: </strong><span t-esc="o.productos_surtidos()"/><br/>
+                                <strong>EQUIPOS Y PRODUCTOS SURTIDOS: </strong><span t-esc="o.productos_surtidos()[0]"/><br/>
+                                <strong>% DE PRODUCTOS: </strong><span t-esc="o.productos_surtidos()[1]"/> %<br/>
                             </div>
 
                             <table class="table table-condensed">
@@ -158,7 +159,7 @@
                                         $<span t-esc="line['total_amount']"/>
                                     </td>
                                     <td align="right">
-                                        <span t-esc="line['porcentaje_gastos']"/> %
+                                        $<span t-esc="line['porcentaje_gastos']"/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -168,6 +169,7 @@
 
                             <div class="text-right"><!--EL METODO DEVUELVE UNA LISTA CON DOS VALORES UNICOS-->
                                 <strong>TOTAL DE GASTOS DE INSTALACIÓN: </strong><span t-esc="o.utilidad()[1]"/><br/>
+                                <strong>% DE GASTOS DE INSTALACIÓN: </strong><span t-esc="o.utilidad()[2]"/> %<br/>
                                 <strong>UTILIDAD DE INSTALACIÓN: </strong><span t-esc="o.utilidad()[0]"/>
                             </div>
 
