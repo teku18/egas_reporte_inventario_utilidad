@@ -33,7 +33,9 @@
 
     'description': """
         se realiza modificaciones al reporte de inventario, y se crean metodos los cuales traen
-        diccionarios, listas y listas con diccionarios
+        diccionarios, listas y listas con diccionarios, de igual manera se crea un nuevo grupo
+        llamado 'Tipo de Cambio' los cuales solo los agregados a este podran interactuar con el
+        modulo, esa configuracion se encuentra en security.
     """,
 
     'author': "Edgar Gustavo",
