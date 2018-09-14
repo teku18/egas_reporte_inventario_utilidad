@@ -28,6 +28,6 @@
 ##############################################################################
 
 import tipo_cambio
-import product_template_update
-import stock_picking_update
 import account_invoice_update
+#import product_template_update
+#import stock_picking_update

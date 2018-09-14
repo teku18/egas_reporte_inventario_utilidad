@@ -13,15 +13,14 @@ class AccountInvoice_update(models.Model):
             """
         self.env.cr.execute(sql)
         consulta = self.env.cr.dictfetchone()
+
         try:
             aux=self.env['tipo.cambio'].search([('id','=',consulta['id'])])
         except:
             return
         return aux
 
+    #SE AGREGA EL CAMPO TIPO DE CAMBIO POR DEFAULT A LA FACTURA (EL ULTIMO TIPO DE CAMBIO QUE SE REGISTRO)
     tipo_cambio_id = fields.Many2one('tipo.cambio','Tipo de Cambio', default=_tipo_cambio)
-    # l10n_mx_edi_cfdi_uuid = fields.Char(string='Fiscal Folio', readonly=True, store=True,
-    #                                     help='Folio in electronic invoice, is returned by SAT when send to stamp.',
-    #                                     compute='_compute_cfdi_values')
 
 AccountInvoice_update()

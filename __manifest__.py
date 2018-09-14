@@ -52,12 +52,11 @@
 
     # Poner los XML a cargar
     'data': [
-        #'templates.xml',
         'views/tipo_cambio.xml',
         'views/account_invoice_views_update.xml',
-        'report/report_stockpicking_operations_update.xml',
-        'security/security.xml',
-        'security/ir.model.access.csv',
+        #'report/report_stockpicking_operations_update.xml',
+        #'security/security.xml',
+        #'security/ir.model.access.csv',
 
     ],
     # only loaded in demonstration mode
